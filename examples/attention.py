@@ -60,15 +60,15 @@ class MultiHeadedAttention(nn.Module):
         batch_size, _, seq_len, head_dim = x.size()  # [batch_size, n_heads, seq_len, head_dim]
         return x.transpose(1, 2).contiguous().view(batch_size, seq_len, self.embed_size)  # [batch_size, seq_len, embed_size]
 
-    def forward(self, x: torch.Tensor, mask: torch.Tensor = None) -> torch.Tensor:
+    def forward(self, query: torch.Tensor, key: torch.Tensor, value: torch.Tensor, mask: torch.Tensor = None) -> torch.Tensor:
         if mask is not None:
             # Apply mask to all heads
             mask = mask.unsqueeze(1)  # 3-dimensional
 
         # Create respective query, key, value pairs (same input for each one)
-        query = self.split_to_heads(self.fc_query(x))
-        key = self.split_to_heads(self.fc_key(x))
-        value = self.split_to_heads(self.fc_value(x))
+        query = self.split_to_heads(self.fc_query(query))
+        key = self.split_to_heads(self.fc_key(key))
+        value = self.split_to_heads(self.fc_value(value))
         print(f'Query, key, value dims (should be identical): '
               f'\n  {query.size()}'
               f'\n  {key.size()}'
@@ -117,5 +117,5 @@ if __name__ == "__main__":
     embedding = nn.Embedding(SRC_VOCAB_SIZE, EMBED_SIZE)
 
     encoded_input = pos_encode(embedding(src_data))
-    out = mh_attn.forward(encoded_input)  # [64, 100, 512] -> [batch_size, seq_len, embed_size]
+    out = mh_attn.forward(encoded_input, encoded_input, encoded_input)  # [64, 100, 512] -> [batch_size, seq_len, embed_size]
     print(f'Final output: {out.size()}')
