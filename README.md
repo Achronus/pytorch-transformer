@@ -25,7 +25,7 @@ respective `.py` files.
 These are found in the `/examples` folder and are graded into two categories: `simple` and `advanced`.
 
 `Simple` demos are small tutorials for specific components to help with debugging the code (e.g., checking tensor dimensions) and act as a quickstart 
-guide for them. You will find them in the format of `[name]-code.py` for code only with comments and `[name].ipynb` for a Jupyter Notebook variant with more 
+guide for them. You will find them in the format of `[name].py` for code only (with comments) and `[name].ipynb` for a Jupyter Notebook variant with more 
 detailed instructions.
 
 Likewise, `advanced` items use the architecture in full-fledged projects. Typically, these are hosted in separate repositories that are linked accordingly.
