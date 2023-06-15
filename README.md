@@ -30,7 +30,7 @@ detailed instructions.
 
 Likewise, `advanced` items use the architecture in full-fledged projects. Typically, these are hosted in separate repositories that are linked accordingly.
 
-- [ ] (Simple) Attention
+- [ ] (Simple) Attention | `examples/attention.py`
 - [ ] (Simple) Transformer Creation
 - [ ] (Advanced) English-French Translation
 
