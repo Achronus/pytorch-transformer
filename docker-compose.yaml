@@ -1,0 +1,9 @@
+services:
+  app:
+    build: .
+    container_name: ml
+    command: jupyter lab --ip=0.0.0.0 --allow-root
+    ports:
+      - 8888:8888
+    volumes:
+      - .:/app
