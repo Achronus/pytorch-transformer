@@ -54,10 +54,6 @@ class MultiHeadedAttention(nn.Module):
         return x.transpose(1, 2).contiguous().view(batch_size, seq_len, self.embed_size)  # [batch_size, seq_len, embed_size]
 
     def forward(self, query: torch.Tensor, key: torch.Tensor, value: torch.Tensor, mask: torch.Tensor = None) -> torch.Tensor:
-        if mask is not None:
-            # Apply mask to all heads
-            mask = mask.unsqueeze(1)  # 3-dimensional
-
         # Create respective query, key, value pairs (same input for each one)
         query = self.split_to_heads(self.fc_query(query))
         key = self.split_to_heads(self.fc_key(key))
