@@ -12,7 +12,7 @@ This section focuses on the components of the architecture that are progressivel
 respective `.py` files.
 - [x] Self-Attention | `model/attention.py`
 - [x] Multi-Headed Attention | `model/attention.py`
-- [ ] Mask Generation
+- [x] Mask Generation | `model/mask.py`
 - [ ] Positional Encoding
 - [ ] Position-Wise Feed-Forward Networks
 - [ ] Residual Connections
@@ -30,7 +30,7 @@ guide for them. You will find them in the format of `[name].py` for code only (w
 Likewise, `advanced` items use the architecture in full-fledged projects. Typically, these are hosted in separate repositories that are linked accordingly.
 
 - [x] (Simple) Attention | `examples/attention.py`
-- [ ] (Simple) Mask Creation
+- [x] (Simple) Masking Attention | `examples/attention-masking.py`
 - [ ] (Simple) Transformer Creation
 - [ ] (Advanced) English-French Translation
 
