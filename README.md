@@ -15,8 +15,8 @@ respective `.py` files.
 - [x] Mask Generation | `model/mask.py`
 - [ ] Positional Encoding
 - [ ] Position-Wise Feed-Forward Networks
-- [ ] Residual Connections
-- [ ] Layer Normalisation
+- [x] Residual Connections | `model/utils.py`
+- [x] Layer Normalisation | `model/utils.py`
 - [ ] Encoders
 - [ ] Decoders
 - [ ] Transformer
@@ -31,6 +31,8 @@ Likewise, `advanced` items use the architecture in full-fledged projects. Typica
 
 - [x] (Simple) Attention | `examples/attention.py`
 - [x] (Simple) Masking Attention | `examples/attention-masking.py`
+- [x] (Simple) Layer Normalisation | `examples/layer-norm.py`
+- [ ] (Simple) Normalising Residual Connections
 - [ ] (Simple) Transformer Creation
 - [ ] (Advanced) English-French Translation
 
