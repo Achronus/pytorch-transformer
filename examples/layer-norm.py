@@ -28,10 +28,31 @@ class LayerNormalization(nn.Module):
 
 
 if __name__ == "__main__":
-    torch.manual_seed(6)
-    sample = torch.rand([2, 3, 2, 4])
-    print(f'Before: {sample.size()} \n{sample}')
-    ln = LayerNormalization(sample.size())
+    NUM_EMBEDDINGS = 10
+    EMBED_SIZE = 3
 
-    x = ln(sample)
+    torch.manual_seed(6)
+    sample = torch.LongTensor([[1, 2, 4, 5], [4, 3, 2, 9]])
+    print(f'Before: {sample.size()} \n{sample}')
+
+    # Embed data
+    embedding = nn.Embedding(NUM_EMBEDDINGS, EMBED_SIZE)
+    embed_data = embedding(sample)
+    embed_shape = embed_data.size()
+
+    # Simple feed-forward network
+    ff = nn.Sequential(
+        nn.Linear(EMBED_SIZE, 100),
+        nn.ReLU(),
+        nn.Linear(100, EMBED_SIZE)
+    )
+
+    # Custom PyTorch module
+    ln = LayerNormalization(embed_shape)
+    x = ln(ff(embed_data))
     print(f'After ln: {x.size()} \n{x}')
+
+    # Compare against PyTorch built-in
+    ln2 = nn.LayerNorm(embed_shape)
+    x2 = ln2(ff(embed_data))
+    print(f'After ln2: {x2.size()} \n{x2}')
