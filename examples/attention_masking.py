@@ -81,7 +81,7 @@ if __name__ == "__main__":
     NUM_HEADS = 1
 
     # Generate random sample data
-    sm_data = torch.randint(1, VOCAB_SIZE, (BATCH_SIZE, MAX_SEQ_LENGTH))  # 3x3 matrix
+    sm_data = torch.randint(1, VOCAB_SIZE, (BATCH_SIZE, MAX_SEQ_LENGTH))  # 1x3 matrix
     print(f'Data size: {sm_data.size()}')
     print(f'Data:\n {sm_data}')
     print('---------------------------------\n')
