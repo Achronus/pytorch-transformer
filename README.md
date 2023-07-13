@@ -13,6 +13,7 @@ respective `.py` files.
 - [x] Self-Attention | `model/attention.py`
 - [x] Multi-Headed Attention | `model/attention.py`
 - [x] Mask Generation | `model/mask.py`
+- [x] Embedding Layer | `model/embed.py`
 - [ ] Positional Encoding
 - [ ] Position-Wise Feed-Forward Networks
 - [x] Residual Connections | `model/utils.py`
@@ -32,6 +33,7 @@ Likewise, `advanced` items use the architecture in full-fledged projects. Typica
 - [x] (Simple) Attention | `examples/attention.py`
 - [x] (Simple) Masking Attention | `examples/attention-masking.py`
 - [x] (Simple) Layer Normalisation | `examples/layer-norm.py`
+- [x] (Simple) Vector Embeddings `examples/embed_vocab.py`
 - [ ] (Simple) Normalising Residual Connections
 - [ ] (Simple) Transformer Creation
 - [ ] (Advanced) English-French Translation

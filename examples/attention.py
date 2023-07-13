@@ -119,3 +119,4 @@ if __name__ == "__main__":
     encoded_input = pos_encode(embedding(src_data))
     out = mh_attn.forward(encoded_input, encoded_input, encoded_input)  # [64, 100, 512] -> [batch_size, seq_len, embed_size]
     print(f'Final output: {out.size()}')
+
