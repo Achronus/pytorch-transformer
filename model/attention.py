@@ -1,11 +1,17 @@
 import math
+import logging
+from logger import logger, enable_logging
 
 import torch
 import torch.nn as nn
 
+logger_attention = logging.getLogger('attention')
 
-def self_attention(queries: torch.Tensor, keys: torch.Tensor, values: torch.Tensor, mask: torch.Tensor = None) -> torch.Tensor:
+
+def self_attention(queries: torch.Tensor, keys: torch.Tensor, values: torch.Tensor,
+                   mask: torch.Tensor = None, log_info: bool = False) -> torch.Tensor:
     """Performs 'Scaled Dot Product Attention' from the 'Attention Is All You Need' paper (https://arxiv.org/abs/1706.03762)."""
+    enable_logging(logger_attention, flag=log_info)
     d_k = keys.size(-1)  # number of tokens/key dimension
 
     # Scores: For each token, determine the attention focus against all other tokens
@@ -16,7 +22,9 @@ def self_attention(queries: torch.Tensor, keys: torch.Tensor, values: torch.Tens
     if mask is not None:
         scaled_scores = scaled_scores.masked_fill(mask == 0, -1e9)  # -1e9: not infinity but large enough!
 
+    logger.debug(f'Scaled scores: {scaled_scores.size()} \n{scaled_scores}\n')
     attn_weights = torch.softmax(scaled_scores, dim=-1)
+    logger.debug(f'Attention weights: {attn_weights.size()} \n{attn_weights}\n')
 
     # Attention output
     return torch.matmul(attn_weights, values)
@@ -27,10 +35,13 @@ class MultiHeadedAttention(nn.Module):
 
     :param embed_size: (int) number of expected features
     :param n_heads: (int) number of heads in the multi-headed attention module
+    :param log_info: (bool) flag for enabling logging. Default is `False`
     """
-    def __init__(self, embed_size: int, n_heads: int) -> None:
+    def __init__(self, embed_size: int, n_heads: int, log_info: bool = False) -> None:
         super().__init__()
+        enable_logging(logger, flag=log_info)
 
+        self.log_info = log_info
         self.embed_size = embed_size
         self.n_heads = n_heads
         self.head_dim = embed_size // n_heads
@@ -46,10 +57,12 @@ class MultiHeadedAttention(nn.Module):
         self.attention = None  # Store attention
 
     def split_to_heads(self, x: torch.Tensor) -> torch.Tensor:
+        logger.debug(f'Before head split: {x.size()}')  # [64, 100, 512]
         batch_size, seq_len, _ = x.size()  # [batch_size, seq_len, embed_size]
         return x.view(batch_size, seq_len, self.n_heads, self.head_dim).transpose(1, 2)  # [batch_size, n_heads, seq_len, head_dim]
 
     def combine_heads(self, x: torch.Tensor) -> torch.Tensor:
+        logger.debug(f'Before combining heads: {x.size()}')  # [64, 8, 100, 64]
         batch_size, _, seq_len, head_dim = x.size()  # [batch_size, n_heads, seq_len, head_dim]
         return x.transpose(1, 2).contiguous().view(batch_size, seq_len, self.embed_size)  # [batch_size, seq_len, embed_size]
 
@@ -58,7 +71,14 @@ class MultiHeadedAttention(nn.Module):
         query = self.split_to_heads(self.fc_query(query))
         key = self.split_to_heads(self.fc_key(key))
         value = self.split_to_heads(self.fc_value(value))
+        logger.debug(f'Query, key, value dims (should be identical): '
+                     f'\n  Query: {query.size()}'
+                     f'\n  Key: {key.size()}'
+                     f'\n  Value: {value.size()}')  # [64, 8, 100, 64]
 
-        attn_out = self_attention(queries=query, keys=key, values=value, mask=mask)  # [batch_size, n_heads, seq_len, head_dim]
+        attn_out = self_attention(queries=query, keys=key, values=value,
+                                  mask=mask, log_info=self.log_info)  # [batch_size, n_heads, seq_len, head_dim]
+        logger.debug(f'Attention output: {attn_out.size()}')  # [64, 8, 100, 64]
         self.attention = self.combine_heads(attn_out)
+        logger.debug(f'After combining heads: {self.attention.size()}\n')  # [64, 100, 512]
         return self.fc_out(self.attention)  # [batch_size, seq_len, embed_size]

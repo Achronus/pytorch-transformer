@@ -16,8 +16,8 @@ respective `.py` files.
 - [x] Embedding Layer | `model/embed.py`
 - [ ] Positional Encoding
 - [ ] Position-Wise Feed-Forward Networks
-- [x] Residual Connections | `model/utils.py`
-- [x] Layer Normalisation | `model/utils.py`
+- [x] Residual Connections | `model/normalize.py`
+- [x] Layer Normalisation | `model/normalize.py`
 - [ ] Encoders
 - [ ] Decoders
 - [ ] Transformer
