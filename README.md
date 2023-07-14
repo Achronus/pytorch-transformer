@@ -13,7 +13,7 @@ respective `.py` files.
 - [x] Self-Attention | `model/attention.py`
 - [x] Multi-Headed Attention | `model/attention.py`
 - [x] Mask Generation | `model/mask.py`
-- [x] Embedding Layer | `model/embed.py`
+- [x] Embedding Methods | `model/embed.py`
 - [ ] Positional Encoding
 - [ ] Position-Wise Feed-Forward Networks
 - [x] Residual Connections | `model/normalize.py`

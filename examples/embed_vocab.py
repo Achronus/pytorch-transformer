@@ -1,4 +1,4 @@
-from model.embed import EmbeddingLayer
+from model.embed import WordEmbeddings
 
 import torch
 
@@ -7,7 +7,7 @@ if __name__ == '__main__':
     embedding_size = 10
     vec_size = 5
 
-    embedding = EmbeddingLayer(embedding_size, vec_size)
+    embedding = WordEmbeddings(embedding_size, vec_size)
 
     # An input tensor of values (acting as indices)
     vocab = {"a": 0, "this": 1, "is": 2, "sentence": 3}
