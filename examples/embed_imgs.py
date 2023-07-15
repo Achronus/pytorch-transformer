@@ -10,13 +10,15 @@ if __name__ == "__main__":
     N_EMBEDS = 5
     BATCH_SIZE = 1
 
-    embedding = PatchEmbeddings(IMG_SIZE, PATCH_SIZE, N_CHANNELS, N_EMBEDS)
+    embedding = PatchEmbeddings(IMG_SIZE, PATCH_SIZE, N_CHANNELS, N_EMBEDS,
+                                log_info=True)
 
     input_img = torch.randint(low=0, high=255,
                               size=(BATCH_SIZE, N_CHANNELS, IMG_SIZE, IMG_SIZE),
                               dtype=torch.float).normal_()
     print(f'Input img size: {input_img.size()}')
 
-    output = embedding(input_img)
-    print(f'Output img size: {output.size()}')
-    print(f'Output image: {output}')
+    patch_embeddings = embedding(input_img)
+    print(embedding.cls_token)
+    print(f'Output size: {patch_embeddings.size()}')
+    print(f'Patch embeddings: \n{patch_embeddings}')
