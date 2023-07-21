@@ -12,15 +12,15 @@ class WordEmbeddings(nn.Module):
     """
     A basic representation of a Word Embedding layer.
 
-    :param embedding_size (int) - size of the vocabulary dictionary
+    :param vocab_size (int) - size of the vocabulary dictionary
     :param vec_size: (int) - number of embeddings per input item in a single vector
     """
-    def __init__(self, embedding_size: int, vec_size: int) -> None:
+    def __init__(self, vocab_size: int, vec_size: int) -> None:
         super().__init__()
-        self.embedding_size = embedding_size
+        self.vocab_size = vocab_size
         self.vec_size = vec_size
 
-        self.embedding_weights = nn.Parameter(torch.Tensor(embedding_size, vec_size))
+        self.embedding_weights = nn.Parameter(torch.Tensor(vocab_size, vec_size))
         self.reset_parameters()
 
     def __init_weights(self, mean: float = 0.0, std: float = 1.0) -> torch.Tensor:
@@ -32,7 +32,7 @@ class WordEmbeddings(nn.Module):
         self.__init_weights()
 
     def embed(self, x: torch.Tensor) -> torch.Tensor:
-        """Retrieve the embeddings (weights) associated to each input value. Each input value acts as an
+        """Retrieve the embeddings (weights) associated to each unique input value. Each one acts as an
         index to a respective set of embedding weights (vector embedding)."""
         try:
             if x.dim() == 1:
@@ -42,7 +42,7 @@ class WordEmbeddings(nn.Module):
             else:
                 raise ValueError("Input must be 1-D or 2-D tensor.")
         except IndexError:
-            raise IndexError(f"'embedding_size' must be greater than 'x.view(-1)'.")
+            raise IndexError(f"'embedding_size' must be > 'vocab_size'.")
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Create vector embeddings for a given input."""
@@ -57,6 +57,7 @@ class PatchEmbeddings(nn.Module):
     :param patch_size: (int)
     :param n_channels: (int) number of image colour channels
     :param n_embeds: (int) number of embeddings per patch (output filters)
+    :param log_info: (bool, optional) a flag for enabling logging information. Defaults to False
     """
     def __init__(self, img_size: int, patch_size: int, n_channels: int, n_embeds: int,
                  log_info: bool = False) -> None:
