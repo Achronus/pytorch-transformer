@@ -22,6 +22,10 @@ respective `.py` files.
 - [ ] Decoders
 - [ ] Transformer
 
+Additional components are found in the `/utils` folder with the respective `.py` files.
+- [x] Raw Text File Reader | `utils/reader.py`
+- [x] Word Tokenizer | `utils/tokenize.py`
+
 ## Demos
 These are found in the `/examples` folder and are graded into two categories: `simple` and `advanced`.
 
