@@ -24,7 +24,7 @@ class WordTokenizer:
         self.tokenized_corpus = self.__tokenize_words()  # corpus as list of words
         self.vocab = self.__build_vocab()
         self.vocab_dict = self.vocab.get_stoi()
-        self.indexed_corpus = self.__tokens_to_indices(self.tokenized_corpus)
+        self.indexed_corpus = self.tokens_to_indices(self.tokenized_corpus)
 
     def __tokenize_words(self) -> list[str]:
         """Converts a corpus of text into a list of words and punctuation."""
@@ -38,6 +38,6 @@ class WordTokenizer:
         logger.debug(f'Words in vocabulary: {len(vocab)}')
         return vocab
 
-    def __tokens_to_indices(self, tokens: list[str]) -> torch.Tensor:
-        """Converts the tokenized corpus into a corpus of indices."""
+    def tokens_to_indices(self, tokens: list[str]) -> torch.Tensor:
+        """Retrieves a set of tokens indices."""
         return torch.LongTensor(self.vocab.lookup_indices(tokens))
