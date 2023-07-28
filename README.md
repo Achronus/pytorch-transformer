@@ -25,6 +25,8 @@ respective `.py` files.
 Additional components are found in the `/utils` folder with the respective `.py` files.
 - [x] Raw Text File Reader | `utils/reader.py`
 - [x] Word Tokenizer | `utils/tokenize.py`
+- [ ] Latent Semantic Analysis (LSA) | `utils/lsa.py`
+- [ ] Pairwise Inner Product (PIP) Loss | `utils/pip.py` 
 
 ## Demos
 These are found in the `/examples` folder and are graded into two categories: `simple` and `advanced`.
@@ -37,8 +39,9 @@ Likewise, `advanced` items use the architecture in full-fledged projects. Typica
 - [x] (Simple) Attention | `examples/attention.py`
 - [x] (Simple) Masking Attention | `examples/attention-masking.py`
 - [x] (Simple) Layer Normalisation | `examples/layer-norm.py`
-- [x] (Simple) Word Embeddings `examples/embed_vocab.py`
-- [x] (Simple) Image Embeddings `examples/embed_imgs.py`
+- [x] (Simple) Word Embeddings | `examples/embed_vocab.py`
+- [x] (Simple) Image Embeddings | `examples/embed_imgs.py`
+- [ ] (Simple) Finding Optimal Embedding Dimension | `examples/optimal_embed_dim.py`
 - [ ] (Simple) Normalising Residual Connections
 - [ ] (Simple) Transformer Creation
 - [ ] (Advanced) English-French Translation
