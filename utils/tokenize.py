@@ -29,7 +29,7 @@ class WordTokenizer:
     def __tokenize_words(self) -> list[str]:
         """Converts a corpus of text into a list of words and punctuation."""
         words = self.tokenizer(self.data)
-        logger.debug(f'Words in corpus: {len(words)}')
+        logger.debug(f'\nWords in corpus: {len(words)}')
         return words
 
     def __build_vocab(self) -> Vocab:
