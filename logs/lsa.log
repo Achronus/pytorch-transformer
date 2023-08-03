@@ -1,0 +1,16 @@
+LSA:INFO:co_occurrence_dict=3509
+LSA:INFO:term_matrix=torch.Size([3509, 3509])
+LSA:INFO:vocab=torch.Size([3509]), total=177691.0
+LSA:INFO:pmi=torch.Size([3509, 3509]), positive_pmi=torch.Size([3509, 3509])
+
+LSA:INFO:co_occurrence_dict=2155
+LSA:INFO:term_matrix=torch.Size([3509, 3509])
+LSA:INFO:vocab=torch.Size([3509]), total=88822.0
+LSA:INFO:pmi=torch.Size([3509, 3509]), positive_pmi=torch.Size([3509, 3509])
+
+LSA:INFO:co_occurrence_dict=2083
+LSA:INFO:term_matrix=torch.Size([3509, 3509])
+LSA:INFO:vocab=torch.Size([3509]), total=88822.0
+LSA:INFO:pmi=torch.Size([3509, 3509]), positive_pmi=torch.Size([3509, 3509])
+
+LSA:INFO:spectrum=torch.Size([3509]), noise=0.15956519544124603, alpha=0.5

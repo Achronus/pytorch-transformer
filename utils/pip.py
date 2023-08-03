@@ -1,14 +1,11 @@
 import math
 import os
-import logging
 
-from logger import enable_logging
+from utils.logger import create_logger
 from utils.lsa import LSAResults
 
 import torch
 import matplotlib.pyplot as plt
-
-logger = logging.getLogger('lsa')
 
 
 class PIPLoss:
@@ -20,12 +17,14 @@ class PIPLoss:
 
     :param lsa_results: (LSAResults) results computed by an LSA model (spectrum, noise, and alpha)
     :param device: (string) name of the PyTorch CUDA device to connect to (if CUDA is available). Defaults to cuda:0
+    :param log_info: (bool, optional) a flag for enabling logging information. Defaults to False
     """
 
     def __init__(self, lsa_results: LSAResults, device: str = "cuda:0", log_info: bool = False) -> None:
-        enable_logging(logger, flag=log_info)
+        self.logger = create_logger(self.__class__.__name__, filename='pip', flag=log_info)
         self.device = torch.device(device if torch.cuda.is_available() else "cpu")
 
+        # Add unique variables
         self.spectrum = lsa_results.spectrum.to(self.device)  # lambda
         self.sigma = lsa_results.noise
         self.alpha = lsa_results.alpha
@@ -61,20 +60,20 @@ class PIPLoss:
         signal_matrix, rank = self.create_signal_and_rank()
         n = signal_matrix.size(0)
         shape = (n, n)
-        logger.debug(f'n={n}, rank={rank}, sigma={self.sigma}')
+        self.logger.info(f'n={n}, rank={rank}, sigma={self.sigma}')
 
         signals = signal_matrix[:rank].to(self.device)  # non-zero (d matrix)
         u_matrix = self.__create_orthogonal_matrix((n, rank)).to(self.device)
         v_matrix = self.__create_orthogonal_matrix((n, rank)).to(self.device)
         valid_signal_dims = range(rank)
-        logger.debug(f'd_matrix={signals.size()}, u_matrix={u_matrix.size()}, v_matrix={v_matrix.size()}')
+        self.logger.info(f'd_matrix={signals.size()}, u_matrix={u_matrix.size()}, v_matrix={v_matrix.size()}')
 
         # Compute x and y (target)
         x = (u_matrix * signals).matmul(v_matrix.T)  # (vocab_size, vocab_size)
 
         embed_matrix = torch.normal(0, self.sigma, size=shape).to(self.device)
         target = x + embed_matrix
-        logger.debug(f'x={x.size()}, target={target.size()}')
+        self.logger.info(f'x={x.size()}, target={target.size()}')
 
         # Compute x and y SVD components
         u, d, v = torch.linalg.svd(x)
@@ -85,7 +84,7 @@ class PIPLoss:
         spectrum = d.pow(self.alpha)
         spectrum_estimate = d1.pow(self.alpha)
         embed_estimate = u1 * spectrum_estimate
-        logger.debug(f'oracle_embed={embed_oracle.size()}, estimate_embed={embed_estimate.size()}')
+        self.logger.info(f'oracle_embed={embed_oracle.size()}, estimate_embed={embed_estimate.size()}')
 
         # Compute Frobenius norms
         pip_losses = [torch.linalg.norm(spectrum.pow(2)).pow(2)]  # Frobenius norms
@@ -118,7 +117,7 @@ class PIPLoss:
             ax = fig.add_subplot(111)
             ax.plot(self.losses, 'aqua', label=r'PIP Loss')
             legend = ax.legend(loc='upper right')
-            plt.title(r'PIP Loss')
+            plt.title(f'PIP Loss - Alpha: {self.alpha}')
             fig_path = f'{self.result_folder}/pip_alpha{self.alpha}.png'
             fig.savefig(fig_path, bbox_extra_artists=(legend,), bbox_inches='tight')
             print(f'Plot loss diagram saved at {fig_path}')

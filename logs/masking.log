@@ -1,0 +1,16 @@
+masking:INFO:Data size: torch.Size([1, 3])
+masking:INFO:Data: tensor([[4, 7, 2]])
+
+masking:INFO:Attention (No Mask) -
+masking:INFO:Attention size: torch.Size([1, 3, 3])
+masking:INFO:Attention data: 
+	tensor([[[-0.2395,  0.2906,  0.0220],
+         [-0.2420,  0.2877,  0.0228],
+         [-0.2138,  0.3673,  0.0054]]], grad_fn=<ViewBackward0>)
+
+masking:INFO:Attention (Masked) -
+masking:INFO:Attention size: torch.Size([1, 3, 3])
+masking:INFO:Attention data: 
+	tensor([[[-0.2411,  0.4240, -0.0015],
+         [-0.1747,  0.4233, -0.0090],
+         [-0.2138,  0.3673,  0.0054]]], grad_fn=<ViewBackward0>)

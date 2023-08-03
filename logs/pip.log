@@ -1,0 +1,4 @@
+PIPLoss:INFO:n=3509, rank=945, sigma=0.15956519544124603
+PIPLoss:INFO:d_matrix=torch.Size([945]), u_matrix=torch.Size([3509, 945]), v_matrix=torch.Size([3509, 945])
+PIPLoss:INFO:x=torch.Size([3509, 3509]), target=torch.Size([3509, 3509])
+PIPLoss:INFO:oracle_embed=torch.Size([3509, 945]), estimate_embed=torch.Size([3509, 3509])

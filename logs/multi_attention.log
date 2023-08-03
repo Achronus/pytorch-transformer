@@ -1,0 +1,11 @@
+MultiHeadedAttention:INFO:Before head split: torch.Size([2, 5, 512])
+MultiHeadedAttention:INFO:Before head split: torch.Size([2, 5, 512])
+MultiHeadedAttention:INFO:Before head split: torch.Size([2, 5, 512])
+MultiHeadedAttention:INFO:Query, key, value dims (should be identical): 
+  Query: torch.Size([2, 4, 5, 128])
+  Key: torch.Size([2, 4, 5, 128])
+  Value: torch.Size([2, 4, 5, 128])
+MultiHeadedAttention:INFO:Attention output: torch.Size([2, 4, 5, 128])
+MultiHeadedAttention:INFO:Before combining heads: torch.Size([2, 4, 5, 128])
+MultiHeadedAttention:INFO:After combining heads: torch.Size([2, 5, 512])
+

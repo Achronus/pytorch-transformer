@@ -1,13 +1,9 @@
 import collections
-import logging
 from dataclasses import dataclass
 
-from logger import enable_logging
+from utils.logger import create_logger
 
 import torch
-
-
-logger = logging.getLogger('lsa')
 
 
 @dataclass
@@ -29,13 +25,15 @@ class LSA:
     :param skip_window: (int, optional) a value for obtaining the co-occurrence of words in the corpus. Defaults to 5
     :param alpha: (float, optional) a hyperparameter to enforce symmetry between matrix factorization methods. Defaults to 0.5
     :param device: (string, optional) name of the PyTorch CUDA device to connect to (if CUDA is available). Defaults to cuda:0
+    :param log_info: (bool, optional) a flag for enabling logging information. Defaults to False
     """
 
     def __init__(self, indexed_corpus: torch.Tensor, skip_window: int = 5, alpha: float = 0.5,
                  device: str = "cuda:0", log_info: bool = False) -> None:
-        enable_logging(logger, flag=log_info)
+        self.logger = create_logger(self.__class__.__name__, filename='lsa', flag=log_info)
         self.device = torch.device(device if torch.cuda.is_available() else "cpu")
 
+        # Add unique variables
         self.corpus = indexed_corpus
         self.skip_window = skip_window
         self.vocab_size = len(set(self.corpus.tolist()))  # Number of unique items in corpus
@@ -47,7 +45,7 @@ class LSA:
         """Trains the model on the class provided corpus."""
         spectrum = self.calc_spectrum()
         noise = self.calc_noise()
-        logger.debug(f'spectrum={spectrum.size()}, noise={noise}, alpha={self.alpha}')
+        self.logger.info(f'spectrum={spectrum.size()}, noise={noise}, alpha={self.alpha}')
         self.results = LSAResults(spectrum=spectrum, noise=noise, alpha=self.alpha)
         return self.results
 
@@ -98,7 +96,7 @@ class LSA:
 
         # E.g., defaultdict({136: Counter({221: 1, 12: 1, 488: 1, 5: 1, 6: 1, 136: 0}, ...)
 
-        logger.debug(f"co_occurrence_dict={len(co_occurrence_dict)}")
+        self.logger.info(f"co_occurrence_dict={len(co_occurrence_dict)}")
         return co_occurrence_dict
 
     def __create_doc_term_matrix(self, corpus: torch.Tensor) -> torch.Tensor:
@@ -114,7 +112,7 @@ class LSA:
                 # Set neighbour_idx_counts to rows for each token_idx
                 term_matrix[i, j] += count
 
-        logger.debug(f"term_matrix={term_matrix.size()}")
+        self.logger.info(f"term_matrix={term_matrix.size()}")
         return term_matrix
 
     def calc_positive_pmi(self, corpus: torch.Tensor) -> torch.Tensor:
@@ -126,7 +124,7 @@ class LSA:
         total_count = term_matrix.sum()  # Total vocab counts
         term_matrix_probs = term_matrix / total_count
         vocab_counts_probs = vocab_counts / torch.sum(vocab_counts)
-        logger.debug(f'vocab={vocab_counts.size()}, total={total_count}')
+        self.logger.info(f'vocab={vocab_counts.size()}, total={total_count}')
 
         # Calculate Pointwise Mutual Information (PMI)
         vocab_probs_outer = torch.outer(vocab_counts_probs, vocab_counts_probs)
@@ -139,5 +137,5 @@ class LSA:
         # Calculate positive PMI
         positive_pmi = pmi
         positive_pmi[positive_pmi < 0] = 0
-        logger.debug(f'pmi={pmi.size()}, positive_pmi={positive_pmi.size()}\n')
+        self.logger.info(f'pmi={pmi.size()}, positive_pmi={positive_pmi.size()}\n')
         return positive_pmi

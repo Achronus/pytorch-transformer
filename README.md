@@ -37,8 +37,8 @@ guide for them. You will find them in the format of `[name].py` for code only (w
 Likewise, `advanced` items use the architecture in full-fledged projects. Typically, these are hosted in separate repositories that are linked accordingly.
 
 - [x] (Simple) Attention | `examples/attention.py`
-- [x] (Simple) Masking Attention | `examples/attention-masking.py`
-- [x] (Simple) Layer Normalisation | `examples/layer-norm.py`
+- [x] (Simple) Masking Attention | `examples/attention_masking.py`
+- [x] (Simple) Layer Normalisation | `examples/layer_norm.py`
 - [x] (Simple) Word Embeddings | `examples/embed_vocab.py`
 - [x] (Simple) Image Embeddings | `examples/embed_imgs.py`
 - [x] (Simple) Finding Optimal Embedding Dimension | `examples/optimal_embed_dim.py`
