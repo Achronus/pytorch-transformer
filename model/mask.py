@@ -1,5 +1,4 @@
 import torch
-import torch.nn as nn
 
 
 def generate_mask(x: torch.Tensor) -> torch.Tensor:

@@ -1,3 +1,5 @@
+import os
+
 from model.embed import WordEmbeddings
 from utils.tokenize import WordTokenizer
 from utils.reader import RawTextReader
@@ -26,7 +28,7 @@ if __name__ == '__main__':
     # More advanced example
     print('\n--------------')
     print('Running text8 example...')
-    reader = RawTextReader(filename='../data/text8.gz')
+    reader = RawTextReader(filename=f'{os.getcwd()}/data/text8.gz')
     data = reader.read_data()
 
     tokenizer = WordTokenizer(data, log_info=True)

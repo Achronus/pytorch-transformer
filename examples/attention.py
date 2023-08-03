@@ -33,9 +33,9 @@ if __name__ == "__main__":
     SRC_VOCAB_SIZE = 5000
     TGT_VOCAB_SIZE = 5000
     EMBED_SIZE = 512
-    NUM_HEADS = 8
-    MAX_SEQ_LENGTH = 100
-    BATCH_SIZE = 64
+    NUM_HEADS = 4
+    MAX_SEQ_LENGTH = 5
+    BATCH_SIZE = 2
 
     # Generate random sample data
     src_data = torch.randint(1, SRC_VOCAB_SIZE, (BATCH_SIZE, MAX_SEQ_LENGTH))
