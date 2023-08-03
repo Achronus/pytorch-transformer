@@ -25,6 +25,7 @@ respective `.py` files.
 Additional components are found in the `/utils` folder with the respective `.py` files.
 - [x] Raw Text File Reader | `utils/reader.py`
 - [x] Word Tokenizer | `utils/tokenize.py`
+- [x] Logger | `utils/logger.py`
 - [x] Latent Semantic Analysis (LSA) | `utils/lsa.py`
 - [x] Pairwise Inner Product (PIP) Loss | `utils/pip.py` 
 
