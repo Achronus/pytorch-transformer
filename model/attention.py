@@ -54,16 +54,19 @@ class MultiHeadedAttention(nn.Module):
         self.attention = None  # Store attention
 
     def split_to_heads(self, x: torch.Tensor) -> torch.Tensor:
+        """Splits a set of data (query, key, or values) into separate attention heads, going from 3 to 4 dimensions."""
         self.logger.info(f'Before head split: {x.size()}')  # [64, 100, 512]
         batch_size, seq_len, _ = x.size()  # [batch_size, seq_len, embed_size]
         return x.view(batch_size, seq_len, self.n_heads, self.head_dim).transpose(1, 2)  # [batch_size, n_heads, seq_len, head_dim]
 
     def combine_heads(self, x: torch.Tensor) -> torch.Tensor:
+        """Combines the attention output heads into one, reducing it from 4 dimensions into 3. Returns the updated output."""
         self.logger.info(f'Before combining heads: {x.size()}')  # [64, 8, 100, 64]
         batch_size, _, seq_len, head_dim = x.size()  # [batch_size, n_heads, seq_len, head_dim]
         return x.transpose(1, 2).contiguous().view(batch_size, seq_len, self.embed_size)  # [batch_size, seq_len, embed_size]
 
     def forward(self, query: torch.Tensor, key: torch.Tensor, value: torch.Tensor, mask: torch.Tensor = None) -> torch.Tensor:
+        """Performs a forward-pass through the Multi-Headed Attention process."""
         # Create respective query, key, value pairs (same input for each one)
         query = self.split_to_heads(self.fc_query(query))
         key = self.split_to_heads(self.fc_key(key))
@@ -73,9 +76,14 @@ class MultiHeadedAttention(nn.Module):
                      f'\n  Key: {key.size()}'
                      f'\n  Value: {value.size()}')  # [64, 8, 100, 64]
 
+        # Compute self attention
         attn_out = self_attention(queries=query, keys=key, values=value,
                                   mask=mask, log_info=self.log_info)  # [batch_size, n_heads, seq_len, head_dim]
         self.logger.info(f'Attention output: {attn_out.size()}')  # [64, 8, 100, 64]
+
+        # Combine the attention heads
         self.attention = self.combine_heads(attn_out)
         self.logger.info(f'After combining heads: {self.attention.size()}\n')  # [64, 100, 512]
+
+        # Pass the combined heads through a final FC layer
         return self.fc_out(self.attention)  # [batch_size, seq_len, embed_size]
