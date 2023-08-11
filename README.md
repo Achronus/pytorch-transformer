@@ -14,8 +14,8 @@ respective `.py` files.
 - [x] Multi-Headed Attention | `model/attention.py`
 - [x] Mask Generation | `model/mask.py`
 - [x] Embedding Methods | `model/embed.py`
-- [ ] Positional Encoding
-- [ ] Position-Wise Feed-Forward Networks
+- [x] Absolute (Sinusoidal) Positional Encoding | `model/encoding.py`
+- [x] Position-Wise Feed-Forward Networks | `model/ffn.py`
 - [x] Residual Connections | `model/normalize.py`
 - [x] Layer Normalisation | `model/normalize.py`
 - [ ] Encoders
@@ -43,6 +43,7 @@ Likewise, `advanced` items use the architecture in full-fledged projects. Typica
 - [x] (Simple) Word Embeddings | `examples/embed_vocab.py`
 - [x] (Simple) Image Embeddings | `examples/embed_imgs.py`
 - [x] (Simple) Finding Optimal Embedding Dimension | `examples/optimal_embed_dim.py`
+- [ ] (Simple) Visualising Positional Encoding
 - [ ] (Simple) Normalising Residual Connections
 - [ ] (Simple) Transformer Creation
 - [ ] (Advanced) English-French Translation
