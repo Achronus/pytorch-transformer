@@ -6,8 +6,17 @@ import torch.nn as nn
 
 
 def self_attention(queries: torch.Tensor, keys: torch.Tensor, values: torch.Tensor,
-                   mask: torch.Tensor = None, log_info: bool = False) -> torch.Tensor:
-    """Performs 'Scaled Dot Product Attention' from the 'Attention Is All You Need' paper (https://arxiv.org/abs/1706.03762)."""
+                   mask: torch.Tensor = None, dropout_layer: nn.Module = None, log_info: bool = False) -> torch.Tensor:
+    """
+    Performs 'Scaled Dot Product Attention' from the 'Attention Is All You Need' paper (https://arxiv.org/abs/1706.03762).
+
+    :param queries: (torch.Tensor) the queries vector
+    :param keys: (torch.Tensor) the keys vector
+    :param values: (torch.Tensor) the values vector
+    :param mask: (torch.Tensor, optional) a mask to apply to the scaled scores. Defaults to `None`
+    :param dropout_layer: (nn.Module, optional) a dropout layer to applying to the attention weights. Defaults to `None`
+    :param log_info: (bool, optional) a flag for logging information. Defaults to `False`
+    """
     logger = create_logger('self_attention', filename='self_attention', flag=log_info)
     d_k = keys.size(-1)  # number of tokens/key dimension
 
@@ -19,9 +28,14 @@ def self_attention(queries: torch.Tensor, keys: torch.Tensor, values: torch.Tens
     if mask is not None:
         scaled_scores = scaled_scores.masked_fill(mask == 0, -1e9)  # -1e9: not infinity but large enough!
 
-    logger.info(f'Scaled scores: {scaled_scores.size()} \n{scaled_scores}\n')
     attn_weights = torch.softmax(scaled_scores, dim=-1)
-    logger.info(f'Attention weights: {attn_weights.size()} \n{attn_weights}\n')
+
+    logger.info(f'Scaled scores: {scaled_scores.size()} \n{scaled_scores}\n')
+    logger.info(f'Attention weights (without dropout): {attn_weights.size()} \n{attn_weights}\n')
+
+    if dropout_layer is not None:
+        attn_weights = dropout_layer(attn_weights)
+        logger.info(f'Attention weights (with dropout): {attn_weights.size()} \n{attn_weights}\n')
 
     # Attention output
     return torch.matmul(attn_weights, values)
@@ -32,9 +46,10 @@ class MultiHeadedAttention(nn.Module):
 
     :param embed_size: (int) number of expected features
     :param n_heads: (int) number of heads in the multi-headed attention module
-    :param log_info: (bool) flag for enabling logging. Default is `False`
+    :param drop_prob: (float, optional) the neuron dropout probability. Default is `0.1`
+    :param log_info: (bool, optional) flag for enabling logging. Default is `False`
     """
-    def __init__(self, embed_size: int, n_heads: int, log_info: bool = False) -> None:
+    def __init__(self, embed_size: int, n_heads: int, drop_prob: float = 0.1, log_info: bool = False) -> None:
         super().__init__()
         self.logger = create_logger(self.__class__.__name__, filename='multi_attention', flag=log_info)
 
@@ -52,6 +67,7 @@ class MultiHeadedAttention(nn.Module):
         self.fc_out = nn.Linear(self.embed_size, self.embed_size)
 
         self.attention = None  # Store attention
+        self.dropout = nn.Dropout(p=drop_prob)
 
     def split_to_heads(self, x: torch.Tensor) -> torch.Tensor:
         """Splits a set of data (query, key, or values) into separate attention heads, going from 3 to 4 dimensions."""
@@ -78,7 +94,8 @@ class MultiHeadedAttention(nn.Module):
 
         # Compute self attention
         attn_out = self_attention(queries=query, keys=key, values=value,
-                                  mask=mask, log_info=self.log_info)  # [batch_size, n_heads, seq_len, head_dim]
+                                  mask=mask, dropout_layer=self.dropout,
+                                  log_info=self.log_info)  # [batch_size, n_heads, seq_len, head_dim]
         self.logger.info(f'Attention output: {attn_out.size()}')  # [64, 8, 100, 64]
 
         # Combine the attention heads

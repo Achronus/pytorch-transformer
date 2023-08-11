@@ -36,15 +36,25 @@ class ResidualAndLayerNorm(nn.Module):
     Performs an intermediate step between each module in the Transformer.
 
     :param feature_dims: (tuple[int, ...] | torch.size) the shape of the data to normalize
+    :param drop_prob: (float, optional) the neuron dropout probability. Defaults to 0.1
     :param epsilon: (float, optional) a value added to the normalization for numerical stability. Default: 1e-6
     :param device: (string, optional) name of the PyTorch CUDA device to connect to (if CUDA is available). Defaults to cuda:0
     """
-    def __init__(self, feature_dims: tuple[int, ...], epsilon: float = 1e-6, device: str = 'cuda:0') -> None:
+    def __init__(self, feature_dims: tuple[int, ...], drop_prob: float = 0.1,
+                 epsilon: float = 1e-6, device: str = 'cuda:0') -> None:
         super().__init__()
         self.device = torch.device(device if torch.cuda.is_available() else "cpu")
         self.norm = LayerNormalization(feature_dims=feature_dims, epsilon=epsilon).to(self.device)
+        self.dropout = nn.Dropout(p=drop_prob)
 
     def forward(self, x: torch.Tensor, module: nn.Module) -> torch.Tensor:
-        """Computes an output from a torch.nn.Module using x, applies a residual connection and normalizes it."""
+        """
+        Computes an output from a given module using x. X is normalised first (instead of last, for simplicity)
+        and then passed through the module and added to the residual connection (x).
+
+        :param x: (torch.Tensor) input data
+        :param module: (nn.Module) a torch module associated to a Transformer module
+                       (E.g., Multi-Headed Attention or a Feed-Forward Network)
+        """
         x = x.to(self.device)
-        return self.norm(x + module(x))
+        return x + self.dropout(module(self.norm(x)))
