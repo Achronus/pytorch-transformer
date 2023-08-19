@@ -22,12 +22,16 @@ class AbsolutePositionalEncoding(nn.Module):
 
         # Compute positional encodings
         pe = torch.zeros(max_len, embed_dim)
+
+        # Create tensor representing positions from 0 to max_len
         position = torch.arange(0, end=max_len).unsqueeze(1)
         logger.info(f'Positions: {position.size()}\n  {position}')
 
-        div_term = torch.exp(torch.arange(0, end=embed_dim, step=2) * -(math.log(100000.0) / embed_dim))
+        # Compute division term for sinusoidal calculations
+        div_term = torch.exp(torch.arange(0, end=embed_dim, step=2) * -(math.log(10000.0) / embed_dim))
         logger.info(f'Division value: {div_term}')
 
+        # Calculate sine and cosine positional encodings
         pe[:, 0::2] = torch.sin(position * div_term)
         pe[:, 1::2] = torch.cos(position * div_term)
         pe = pe.unsqueeze(0)
@@ -36,6 +40,11 @@ class AbsolutePositionalEncoding(nn.Module):
         self.register_buffer('pe', pe)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        """Adds positional information to a set of embeddings (x)."""
+        """
+        Adds positional information to a set of embeddings (x).
+
+        :param x: (torch.Tensor) input embeddings
+        :return: (torch.Tensor) embeddings with positional information
+        """
         x = x + self.pe[:, :x.size(1)].requires_grad_(False)
         return self.dropout(x)
