@@ -43,7 +43,7 @@ Likewise, `advanced` items use the architecture in full-fledged projects. Typica
 - [x] (Simple) Word Embeddings | `examples/embed_vocab.py`
 - [x] (Simple) Image Embeddings | `examples/embed_imgs.py`
 - [x] (Simple) Finding Optimal Embedding Dimension | `examples/optimal_embed_dim.py`
-- [ ] (Simple) Visualising Positional Encoding
+- [x] (Simple) Visualising Positional Encoding | `examples/pos_encoding.py`
 - [ ] (Simple) Normalising Residual Connections
 - [ ] (Simple) Transformer Creation
 - [ ] (Advanced) English-French Translation
