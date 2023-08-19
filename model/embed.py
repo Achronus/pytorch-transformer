@@ -10,17 +10,14 @@ class WordEmbeddings(nn.Module):
     A basic representation of a Word Embedding layer.
 
     :param vocab_size (int) - size of the vocabulary dictionary
-    :param vec_size: (int) - number of embeddings per input item in a single vector
+    :param embed_dim: (int) - the number of dimensions for each embedding (e.g., 512)
     :param device: (string, optional) name of the PyTorch CUDA device to connect to (if CUDA is available). Defaults to cuda:0
     """
-    def __init__(self, vocab_size: int, vec_size: int, device: str = 'cuda:0') -> None:
+    def __init__(self, vocab_size: int, embed_dim: int, device: str = 'cuda:0') -> None:
         super().__init__()
         self.device = torch.device(device if torch.cuda.is_available() else "cpu")
 
-        self.vocab_size = vocab_size
-        self.vec_size = vec_size
-
-        self.embedding_weights = nn.Parameter(torch.Tensor(vocab_size, vec_size)).to(self.device)
+        self.embedding_weights = nn.Parameter(torch.Tensor(vocab_size, embed_dim)).to(self.device)
         self.reset_parameters()
 
     def __init_weights(self, mean: float = 0.0, std: float = 1.0) -> torch.Tensor:
@@ -31,22 +28,9 @@ class WordEmbeddings(nn.Module):
     def reset_parameters(self):
         self.__init_weights()
 
-    def embed(self, x: torch.Tensor) -> torch.Tensor:
-        """Retrieve the embeddings (weights) associated to each unique input value. Each one acts as an
-        index to a respective set of embedding weights (vector embedding)."""
-        try:
-            if x.dim() == 1:
-                return self.embedding_weights[x]
-            elif x.dim() == 2:
-                return self.embedding_weights.index_select(0, x.view(-1))
-            else:
-                raise ValueError("Input must be 1-D or 2-D tensor.")
-        except IndexError:
-            raise IndexError(f"'embedding_size' must be > 'vocab_size'.")
-
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Create vector embeddings for a given input."""
-        return self.embed(x)
+        return self.embedding_weights[x]
 
 
 class PatchEmbeddings(nn.Module):
@@ -54,7 +38,7 @@ class PatchEmbeddings(nn.Module):
     Converts a batch of images into patches and projects them into a vector space.
 
     :param img_size: (int) the size of one dimension of the image (WxH must match)
-    :param patch_size: (int)
+    :param patch_size: (int) the size of each patch (used for kernel and stride)
     :param n_channels: (int) number of image colour channels
     :param n_embeds: (int) number of embeddings per patch (output filters)
     :param device: (string, optional) name of the PyTorch CUDA device to connect to (if CUDA is available). Defaults to cuda:0
