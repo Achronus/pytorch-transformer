@@ -1,4 +1,6 @@
 import logging
+import os
+
 from logging import FileHandler, Formatter, StreamHandler
 
 
@@ -11,8 +13,16 @@ def create_logger(name: str, filename: str, flag: bool, mode: str = 'w') -> logg
     :param flag: (bool) flag for enabling or disabling the logger
     :param mode: (optional, str) sets the file handler mode. Defaults to overwriting the file content
     """
+    filepath = f'{os.getcwd()}/logs/{filename}.log'
+
+    # Create log file if it doesn't exist
+    if not os.path.isfile(filepath):
+        with open(filepath, 'w') as f:
+            pass
+
+    # Create generic logger and return it
     log_obj = Logger(name, enable=flag)
-    log_obj.add_fh(f'logs/{filename}.log', mode=mode)
+    log_obj.add_fh(filepath, mode=mode)
     return log_obj.get()
 
 
