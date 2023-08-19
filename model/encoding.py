@@ -10,9 +10,9 @@ class AbsolutePositionalEncoding(nn.Module):
     A basic representation of Absolute (Sinusoidal) Positional Encoding defined
     in the 'Attention Is All You Need' paper (https://arxiv.org/abs/1706.03762).
 
-    :param embed_dim: (int) the size of the embedding vector
+    :param embed_dim: (int) the number of dimensions for each embedding (e.g., 512)
     :param drop_prob: (float) the neuron dropout probability
-    :param max_len: (int, optional) the maximum size of the encodings. Default is `1500`
+    :param max_len: (int, optional) the maximum size of the encodings (sequence length). Default is `1500`
     :param log_info: (bool, optional) a flag for logging information. Defaults to `False`
     """
     def __init__(self, embed_dim: int, drop_prob: float, max_len: int = 1500, log_info: bool = False) -> None:
