@@ -18,8 +18,8 @@ respective `.py` files.
 - [x] Position-Wise Feed-Forward Networks | `model/ffn.py`
 - [x] Residual Connections | `model/normalize.py`
 - [x] Layer Normalisation | `model/normalize.py`
-- [ ] Encoders
-- [ ] Decoders
+- [x] Encoders | `model/transformer.py`
+- [x] Decoders | `model/transformer.py`
 - [ ] Transformer
 
 Additional components are found in the `/utils` folder with the respective `.py` files.
