@@ -12,7 +12,8 @@ class AbsolutePositionalEncoding(nn.Module):
 
     :param embed_dim: (int) the number of dimensions for each embedding (e.g., 512)
     :param drop_prob: (float) the neuron dropout probability
-    :param max_len: (int, optional) the maximum size of the encodings (sequence length). Default is `1500`
+    :param max_len: (int, optional) the maximum size of the encodings (sequence length). Keep large to accommodate for
+                    varying sequence lengths. Default is `1500`
     :param log_info: (bool, optional) a flag for logging information. Defaults to `False`
     """
     def __init__(self, embed_dim: int, drop_prob: float, max_len: int = 1500, log_info: bool = False) -> None:
