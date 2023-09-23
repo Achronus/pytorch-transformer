@@ -11,12 +11,11 @@ class WordEmbeddings(nn.Module):
 
     :param vocab_size (int) - size of the vocabulary dictionary
     :param embed_dim: (int) - the number of dimensions for each embedding (e.g., 512)
-    :param device: (string, optional) name of the PyTorch CUDA device to connect to (if CUDA is available). Defaults to cuda:0
+    :param device: (string, optional) name of the PyTorch CUDA device to connect to (if CUDA is available). Defaults to `cpu`
     """
-    def __init__(self, vocab_size: int, embed_dim: int, device: str = 'cuda:0') -> None:
+    def __init__(self, vocab_size: int, embed_dim: int, device: str = 'cpu') -> None:
         super().__init__()
-        self.device = torch.device(device if torch.cuda.is_available() else "cpu")
-
+        self.device = device
         self.embedding_weights = nn.Parameter(torch.Tensor(vocab_size, embed_dim)).to(self.device)
         self.reset_parameters()
 
@@ -41,14 +40,14 @@ class PatchEmbeddings(nn.Module):
     :param patch_size: (int) the size of each patch (used for kernel and stride)
     :param n_channels: (int) number of image colour channels
     :param n_embeds: (int) number of embeddings per patch (output filters)
-    :param device: (string, optional) name of the PyTorch CUDA device to connect to (if CUDA is available). Defaults to cuda:0
-    :param log_info: (bool, optional) a flag for enabling logging information. Defaults to False
+    :param device: (string, optional) name of the PyTorch CUDA device to connect to (if CUDA is available). Defaults to `cpu`
+    :param log_info: (bool, optional) a flag for enabling logging information. Defaults to `False`
     """
     def __init__(self, img_size: int, patch_size: int, n_channels: int, n_embeds: int,
                  device: str = 'cuda:0', log_info: bool = False) -> None:
         super().__init__()
         self.logger = create_logger(self.__class__.__name__, filename='embeddings', flag=log_info)
-        self.device = torch.device(device if torch.cuda.is_available() else "cpu")
+        self.device = device
 
         # Comments follow example: batch_size=1, img_size=32, patch_size=4, n_channels=3, n_embeds=5
         self.patch_dim = img_size // patch_size  # 32x32 -> 8
