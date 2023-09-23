@@ -20,7 +20,7 @@ respective `.py` files.
 - [x] Layer Normalisation | `model/normalize.py`
 - [x] Encoders | `model/transformer.py`
 - [x] Decoders | `model/transformer.py`
-- [ ] Transformer
+- [x] Transformer | `model/transformer.py`
 
 Additional components are found in the `/utils` folder with the respective `.py` files.
 - [x] Raw Text File Reader | `utils/reader.py`
