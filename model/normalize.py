@@ -44,7 +44,7 @@ class ResidualAndLayerNorm(nn.Module):
                  epsilon: float = 1e-6, device: str = 'cpu') -> None:
         super().__init__()
         self.device = device
-        self.norm = LayerNormalization(feature_dims=feature_dims, epsilon=epsilon).to(self.device)
+        self.norm = LayerNormalization(feature_dims=feature_dims, epsilon=epsilon, device=device).to(self.device)
         self.dropout = nn.Dropout(p=drop_prob)
 
     def forward(self, x: torch.Tensor, module: nn.Module) -> torch.Tensor:

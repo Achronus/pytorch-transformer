@@ -15,14 +15,16 @@ class AbsolutePositionalEncoding(nn.Module):
     :param max_len: (int, optional) the maximum size of the encodings (sequence length). Keep large to accommodate for
                     varying sequence lengths. Default is `1500`
     :param log_info: (bool, optional) a flag for logging information. Defaults to `False`
+    :param device: (string, optional) name of the PyTorch CUDA device to connect to (if CUDA is available). Defaults to `cpu`
     """
-    def __init__(self, embed_dim: int, drop_prob: float, max_len: int = 1500, log_info: bool = False) -> None:
+    def __init__(self, embed_dim: int, drop_prob: float, max_len: int = 1500, log_info: bool = False, device: str = 'cpu') -> None:
         super().__init__()
         logger = create_logger('ape', filename='encoding', flag=log_info)
+        self.device = device
         self.dropout = nn.Dropout(p=drop_prob)
 
         # Compute positional encodings
-        pe = torch.zeros(max_len, embed_dim)
+        pe = torch.zeros(max_len, embed_dim).to(self.device)
 
         # Create tensor representing positions from 0 to max_len
         position = torch.arange(0, end=max_len).unsqueeze(1)
@@ -47,5 +49,6 @@ class AbsolutePositionalEncoding(nn.Module):
         :param x: (torch.Tensor) input embeddings
         :return: (torch.Tensor) embeddings with positional information
         """
+        x = x.to(self.device)
         x = x + self.pe[:, :x.size(1)].requires_grad_(False)
         return self.dropout(x)
