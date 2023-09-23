@@ -30,22 +30,16 @@ Additional components are found in the `/utils` folder with the respective `.py`
 - [x] Pairwise Inner Product (PIP) Loss | `utils/pip.py` 
 
 ## Demos
-These are found in the `/examples` folder and are graded into two categories: `simple` and `advanced`.
+These are found in the `/examples` folder and consist of simple demos (small tutorials) for specific components to help with debugging the code (e.g., checking tensor dimensions) and act as a quickstart guide for them. You will find them in the format of `[name].py` for code only (with comments).
 
-`Simple` demos are small tutorials for specific components to help with debugging the code (e.g., checking tensor dimensions) and act as a quickstart 
-guide for them. You will find them in the format of `[name].py` for code only (with comments).
-
-Likewise, `advanced` items use the architecture in full-fledged projects. Typically, these are hosted in separate repositories that are linked accordingly.
-
-- [x] (Simple) Attention | `examples/attention.py`
-- [x] (Simple) Masking Attention | `examples/attention_masking.py`
-- [x] (Simple) Layer Normalisation | `examples/layer_norm.py`
-- [x] (Simple) Word Embeddings | `examples/embed_vocab.py`
-- [x] (Simple) Image Embeddings | `examples/embed_imgs.py`
-- [x] (Simple) Finding Optimal Embedding Dimension | `examples/optimal_embed_dim.py`
-- [x] (Simple) Visualising Positional Encoding | `examples/pos_encoding.py`
-- [x] (Simple) Transformer Creation | `examples/transformer_demo.py`
-- [ ] (Advanced) English-French Translation
+- [x] Attention | `examples/attention.py`
+- [x] Masking Attention | `examples/attention_masking.py`
+- [x] Layer Normalisation | `examples/layer_norm.py`
+- [x] Word Embeddings | `examples/embed_vocab.py`
+- [x] Image Embeddings | `examples/embed_imgs.py`
+- [x] Finding Optimal Embedding Dimension | `examples/optimal_embed_dim.py`
+- [x] Visualising Positional Encoding | `examples/pos_encoding.py`
+- [x] Transformer Creation | `examples/transformer_demo.py`
 
 # References
 Huang, A., Subramanian, S., Sum, J., Almubarak, K., and Biderman, S., 2022. *The Annotated Transformer*. [online] Harvard University. Available from: 
